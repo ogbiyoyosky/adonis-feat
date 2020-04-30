@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ogbiyoyosky/adonis-SOC.git"
+    "url": "git+https://github.com/ogbiyoyosky/adonis-fea.git"
   },
   "devDependencies": {
     "@adonisjs/fold": "4.0.9",
