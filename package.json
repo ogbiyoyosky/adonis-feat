@@ -10,12 +10,11 @@
     "type": "git",
     "url": "git+https://github.com/ogbiyoyosky/adonis-SOC.git"
   },
-  "dependencies": {
+  "devDependencies": {
     "@adonisjs/fold": "4.0.9",
     "adonis-fold": "^3.0.3",
     "jsdoc": "^3.6.3"
   },
-  "devDependencies": {},
   "author": "Ogbiyoyo, Emmanuel I",
   "license": "ISC",
   "bugs": {

@@ -18,7 +18,7 @@ class Feature extends Command {
    * @return {void}
    */
   async _getFilePath() {
-    return path.join(process.cwd(), 'app/Controllers/', 'Features')
+    return path.join(process.cwd(), 'app/', 'Features')
   }
 
 
@@ -28,6 +28,7 @@ class Feature extends Command {
       name: name
     })
   }
+
 
   static get description() {
     return 'Make a new Feature'

@@ -1,12 +1,30 @@
 'use strict'
+const BaseFeature = use("App/Features/BaseFeature")
 
-class {{name}} {
-    constructor (  request, response, auth ) {
-        this.request = request
-        this.response = response
-        this.auth = auth
+class {{name}}  extends BaseFeature{
+    constructor (data) {
+        super(data)
     }
 
-  
+    async handle () {
+        // const { userId } = this.data
+        // const [userLookupError, user] = await this.doAsyncOperation(User.find(userId))
+
+        // if (userLookupError)
+            // return this.createOperationResponse({
+            //  error: userLookupError,
+            //  statusCode: 400,
+            //  status: "error",
+            //  message: "We could not find that user",
+            // })
+
+        // return this.createOperationResponse({
+        //  statusCode: 200,
+        //  status: "success",
+        //  message: "Successfully did some really cool stuff",
+        //  results: [user],
+        // })
+    }
+
 }
 module.exports = {{ name }}

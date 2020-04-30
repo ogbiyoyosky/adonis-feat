@@ -1,7 +1,7 @@
 "use strict"
 
 /**
- * adonis-soc
+ * adonis-feat
  *
  * (c) Emmanuel Ogbiyoyo <ogbiyoyosky@gmail.com>
  *

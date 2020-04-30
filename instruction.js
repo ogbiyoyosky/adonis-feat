@@ -1,5 +1,5 @@
 /**
- * adonis-soc
+ * adonis-feat
  *
  * (c) Ogbiyoyo, Emmanuel <ogbiyoyosky@gmail.com>
  *
@@ -7,4 +7,12 @@
  * file that was distributed with this source code.
  */
 
-module.exports = async cli => {};
+
+module.exports = async cli => {
+    try {
+        await cli.copy(path.join(__dirname, 'templates/BaseFeature.js'), path.join(cli.helpers.appPath(), 'Features/BaseFeature.js'))
+        cli.command.completed('create', 'Features/BaseFeature.js')
+    } catch (error) {
+        console.log(error)
+    }
+};
