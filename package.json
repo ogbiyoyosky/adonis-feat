@@ -1,6 +1,6 @@
 {
   "name": "adonis-feat",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "A simple architectural pattern for AdonisJs to allow focus on a particular concern or feature",
   "main": "index.js",
   "scripts": {
@@ -8,17 +8,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ogbiyoyosky/adonis-fea.git"
+    "url": "git+https://github.com/ogbiyoyosky/adonis-feat.git"
   },
   "devDependencies": {
     "@adonisjs/fold": "4.0.9",
-    "adonis-fold": "^3.0.3",
     "jsdoc": "^3.6.3"
   },
   "author": "Ogbiyoyo, Emmanuel I",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ogbiyoyosky/adonis-SOC/issues"
+    "url": "https://github.com/ogbiyoyosky/adonis-feat/issues"
   },
-  "homepage": "https://github.com/ogbiyoyosky/adonis-SOC#readme"
+  "homepage": "https://github.com/ogbiyoyosky/adonis-feat#readme"
 }
