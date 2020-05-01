@@ -3,10 +3,11 @@ const safeAwait = require('safe-await')
 class BaseFeature {
     constructor(data) {
         this.data = data
-        this.handle()
     }
 
-    doAsyncOperation = (operation) => safeAwait(operation)
+    async doAsyncOperation(operation) {
+        return await safeAwait(operation)
+    }
 
     /**
      * Provides a response for an operation either successful or failed.
@@ -14,7 +15,7 @@ class BaseFeature {
      * 
      * @param {Object}  error       - Error object (if any)
      * @param {String}  status      - Denotes operation status
-     * @param {String}  label       - Provides a label for log messages
+     * @param {String}  errorlabel       - Provides a label for log messages
      * @param {Integer} statusCode  - Provides a label for log messages
      * @param {Array|Null} results
      * 
@@ -23,14 +24,14 @@ class BaseFeature {
     createOperationResponse({
         error,
         status = "Error",
-        label,
+        errorLabel,
         statusCode = 400,
         message,
-        results = null,
+        results = [],
     }) {
         if (error)
             console.log(
-                `${label} error ==> Encountered a fatal error: `,
+                `${errorLabel} error ==> Encountered a fatal error: `,
                 error ? error.message : ""
             );
         return {
