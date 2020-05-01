@@ -5,8 +5,13 @@ class BaseFeature {
         this.data = data
     }
 
+    /**
+     * 
+     * @param {operation}  async operation 
+     */
     async doAsyncOperation(operation) {
         return await safeAwait(operation)
+
     }
 
     /**
