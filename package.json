@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/ogbiyoyosky/adonis-feat/issues"
   },
-  "homepage": "https://github.com/ogbiyoyosky/adonis-feat#readme"
+  "homepage": "https://github.com/ogbiyoyosky/adonis-feat#readme",
+  "dependencies": {
+    "safe-await": "^1.0.0"
+  }
 }
