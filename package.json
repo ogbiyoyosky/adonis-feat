@@ -1,6 +1,6 @@
 {
   "name": "adonis-feat",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A simple architectural pattern for AdonisJs to allow focus on a particular concern or feature",
   "main": "index.js",
   "scripts": {
