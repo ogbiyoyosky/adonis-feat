@@ -5,7 +5,7 @@
 - [Introduction](#introduction)
 - [Layers](#layers)
   - [Domains](#domains)
-  - [Features](#feature)
+  - [Features](#features)
 - [Installation](#installation)
 - [Getting Started](#getting-started)
 - [Command](#command)
@@ -17,112 +17,67 @@
 
 Adonis Feat is a software development paradigm for maintaining a scalable application architecture. Writing code is fun. _Writing code is easy_&mdash;writing code that will not muck up the codebase, pile technical debt and is reusable&mdash;not so much.
 
-With Adonis Feat, we attempt to solve these problems. We abstract all business code into a single layer of features for and applicaion with a specific domain.
+With Adonis Feat, we attempt to solve these problems. We abstract all business code into a single layer of features for and applications with a specific domain.
 
 #### Domains
 
 We have a concept of domains. Typically, most tasks critical to applications fall into a set of domains. A regular e-commerce application may contain the following domains:
 
-- `User` domain: Where all code concerning user management is housed.
+- `UserManagement` domain: Where all code concerning user management is housed.
 - `Order` domain: May contain code that creates a new order, logs order information, notifies third parties e.t.c
 
-#### Services
-
-Adonis Feat promotes a single responsibility architecture as we may think of our applications as being comprised of multiple small services as opposed to a single monolithic entity. Typically we could have services such as an API service that exposes a REST API or an Auth service that is especially handy for Single Sign On (SSO) architectures.
-
-Services contain nearly everything that comes with a barebones Adonis installation as well as some new stuff we'll be introducing.
 
 
+#### Features
 
-#### Feature
-
-Features are usually what make up our applications. Usually, in many applications we have features such as search profiles feature, or login feature. Features are used by controllers in our Service layer.
+Features are usually what make up our applications. Usually, in many applications, we have features such as search profiles feature, or login feature. Features are used by controllers in our Service layer.
 
 Below is an example Feature class.
 
 ```js
-use strict'
-const User = use('App/Models/User')
-const Config = use('Config')
+"use strict";
 
+const BaseFeature = use("App/Features/BaseFeature");
+const User = use("App/Models/User");
 
-class LoginUserFeature {
-  constructor(request, response, auth) {
-    this.request = request
-    this.response = response
-    this.auth = auth
+class RegisterUserFeature extends BaseFeature {
+  constructor(data) {
+    super(data);
   }
 
-  async login() {
-    try {
-      const {
-        email,
-        password
-      } = this.request.all()
-
-      const user = await User.query()
-        .where('email', email)
-        .first()
-
-      let token
-      if (user.is_activated_at != null) {
-
-        if (user.is_ban) {
-          return this.response.status(400).send({
-            message: 'User ban please contact th admin',
-            status_code: 400,
-            status: 'fail'
-          })
-        }
-        token = await this.auth.withRefreshToken()
-          .attempt(email, password)
-
-        const authConfig = Config.get('auth')
-        const { expiresIn } = authConfig.jwt.options
-        token.expiresIn = expiresIn
-
-
-        return this.response.status(200).send({
-          message: 'Login Successful',
-          status: "Success",
-          status_code: 200,
-          result: token
-        })
-      } else {
-        return this.response.status(400).send({
-          message: 'User was either not found or has been deactivated by the Admin',
-          status_code: 400,
-          status: 'fail'
-        })
-      }
-    } catch (error) {
-      console.log('Login Error -> ', error);
-      return this.response.status(400).send({
-        status: 'fail',
-        status_code: 400,
-        message: 'Email Or Password Incorrect'
-      })
-    }
+  async handle() {
+    const payload = this.data;
+    const [userRegistrationError, user] = await this.doAsyncOperation(
+      User.create(payload)
+    );
+    if (userRegistrationError)
+      return this.createOperationResponse({
+        error: userRegistrationError,
+        statusCode: 400,
+        status: "error",
+        message: "This User Already Exist In Our System.",
+        errorLabel: "User Registration",
+      });
+    return this.createOperationResponse({
+      statusCode: 200,
+      status: "success",
+      message: "Registration Successful.",
+      results: [user],
+    });
   }
-
 }
-module.exports = LoginUserFeature
+module.exports = RegisterUserFeature;
 ```
 
 ## Installation
 
-Simply run this command to install the Adoni package into the project.
+Simply run this command to install the Adonis-Feat package into your project.
 
 ```bash
-npm i adonis-feat@latest
+adonis install adonis-feat
 ```
 
-
-
-## Getting Started
-
-We'll demo a sample application now. We'll be building an Adonis  application that requires us to be able to login, we will create a feature called LoginUserFeature in the Authentication Module
-First of all, run this command to install the global Adonis Hexa project scaffold.
+Next, register the provider inside ```start/app.js``` file. 
 
 
 ```javascript
@@ -130,43 +85,123 @@ const aceProviders = [
   'adonis-feat/providers/AdonisFeatProvider'
 ];
 ```
-## Command
 
-create a controller and add a method for the route to use then call the method on the feature class.
+## Getting Started
 
-```js
-'strict'
+We'll demo a sample application now. We'll be building an Adonis  application that registers user, we will create a feature called RegisterUserFeature inside the UserManagement Domain.
 
-const LoginUserFeature = use('App/Controllers/Features/LoginUserFeature')
+### Command
 
-
-class AuthController {
-
-
-    loginUser({
-        request,
-        response,
-        auth
-    }) {
-        return new LoginUserFeature(request, response, auth).login()
-    }
-
-    
-}
-
-module.exports = AuthController
-
-
-
-```
+Simply run this command to create a new feature into your project.
 
 ```bash
 e.g adonis make:feature Domain/Feature
-adonis make:feature AuthenticationModule/LoginUserFeature
+adonis make:feature UserManagement/RegisterUserFeature
 ```
 
+After running this command, a **Features** directory will be generated inside your **app** directory. Inside the **Features** directory, a file named *BaseFeature.js* and a directory named **UserManagement** is generated.
+
+Inside the **UserManagement** directory, the feature file is generated named *RegisterUserFeature.js* 
+
+```js
+"use strict";
+
+const BaseFeature = use("App/Features/BaseFeature");
+
+class RegisterUserFeature extends BaseFeature {
+  constructor (data) {
+        super(data)
+    }
+
+    async handle () {
+        // const { userId } = this.data
+        // const [userLookupError, user] = await this.doAsyncOperation(User.find(userId))
+
+        // if (userLookupError)
+            // return this.createOperationResponse({
+            //  error: userLookupError,
+            //  statusCode: 400,
+            //  status: "error",
+            //  message: "We could not find that user",
+            // })
+
+        // return this.createOperationResponse({
+        //  statusCode: 200,
+        //  status: "success",
+        //  message: "Successfully did some really cool stuff",
+        //  results: [user],
+        // })
+    }
+}
+module.exports = RegisterUserFeature;
+```
+
+So, there some code commented above which you can replace with your own logic. But **adonis-feat** offers you some methods which are the ``doAsyncOperation()`` method that allows you to run some asynchronous operation and the ``createOperationResponse()`` method that construct a standard successfully or failed response.
 
 
+Next, paste this inside ``app/Features/UserManagement/RegisterUserFeature.js`` file. 
+
+
+
+```js
+"use strict";
+const BaseFeature = use("App/Features/BaseFeature");
+const User = use("App/Models/User");
+
+class RegisterUserFeature extends BaseFeature {
+  constructor(data) {
+    super(data);
+  }
+
+  async handle() {
+    const payload = this.data;
+    const [userRegistrationError, user] = await this.doAsyncOperation(
+      User.create(payload)
+    );
+    if (userRegistrationError)
+      return this.createOperationResponse({
+        error: userRegistrationError,
+        statusCode: 400,
+        status: "error",
+        message: "This User Already Exist In Our System.",
+        errorLabel: "User Registration",
+      });
+    return this.createOperationResponse({
+      statusCode: 201,
+      status: "success",
+      message: "Registration Successful.",
+      results: user,
+    });
+  }
+}
+module.exports = RegisterUserFeature;
+
+```
+
+So, the `handle()` method handles all the logics. Inside the `handle()` method we set the *`payload`* to be *`this.data`* and *`this.data`* is the request object coming from the `UserController`
+
+
+This is UserController file `app/Controllers/Http/UserController.js`
+
+```js
+"use strict";
+const RegisterUserFeature = use("App/Features/UserManagement/RegisterUserFeature");
+
+class UserController {
+
+  async register({ response, request }) {
+
+    const payload = request.all();
+    const result = await new RegisterUserFeature(payload).handle();
+    const { status_code } = result;
+
+    return response.status(status_code).json(result);
+  }
+
+}
+
+module.exports = UserController;
+```
 
 ## Contributing
 
