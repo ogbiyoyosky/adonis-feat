@@ -12,7 +12,7 @@ const path = require('path')
 
 module.exports = async cli => {
     try {
-        await cli.copy(path.join(__dirname, 'templates/BaseFeature.js'), path.join(cli.helpers.appRoot(), 'Features/BaseFeature.js'))
+        await cli.copy(path.join(__dirname, 'Commands/templates/BaseFeature.js'), path.join(cli.helpers.appRoot(), 'Features/BaseFeature.js'))
         cli.command.completed('create', 'Features/BaseFeature.js')
     } catch (error) {
         console.log(error)
