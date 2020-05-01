@@ -23,6 +23,7 @@ class Feature extends Command {
 
 
   async _generateFeature(testPath, name) {
+
     const template = await this.readFile(path.join(__dirname, './templates/feature.mustache'), 'utf-8')
     await this.generateFile(testPath, template, {
       name: name
@@ -46,13 +47,31 @@ class Feature extends Command {
     name
   }) {
     const basePath = await this._getFilePath()
-    const featurePath = path.join(basePath, `${_.camelCase(name).charAt(0).toUpperCase() + name.substring(1)}.js`)
+    let featurePath
+    if (name.toLowerCase().includes('feature'.toLowerCase())) {
+      featurePath = path.join(basePath, `${_.camelCase(name).charAt(0).toUpperCase() + name.substring(1)}.js`)
+    } else {
+      featurePath = path.join(basePath, `${_.camelCase(name).charAt(0).toUpperCase() + name.substring(1)}Feature.js`)
+    }
+
     const incrementalPath = featurePath.replace(process.cwd(), '').replace(path.sep, '')
-    const className = name.replace(/[-/_](\w)/g, (match, group) => group.toUpperCase())
+    const className = name.split('/')
+
+
+    const lastNameIdx = className[className.length - 1]
+
+    let newClassName
+
+    if (lastNameIdx.toLowerCase().includes('feature'.toLowerCase())) {
+      newClassName = lastNameIdx
+    } else {
+      newClassName = lastNameIdx + "Feature"
+    }
+
 
     try {
       await this._ensureInProjectRoot()
-      await this._generateFeature(featurePath, className)
+      await this._generateFeature(featurePath, newClassName)
       this.completed('create', incrementalPath)
 
       /**
