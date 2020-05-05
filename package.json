@@ -1,11 +1,12 @@
 {
   "name": "adonis-feat",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "A simple architectural pattern for AdonisJs to allow focus on a particular concern or feature",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ogbiyoyosky/adonis-feat.git"
